@@ -16,13 +16,16 @@ librarian 处理文档的标准工作流。
 
 1. 识别文件类型（PDF / Word / PPT / Excel / 图片）
 2. 选择对应工具：
-   - PDF → `anthropics/pdf` skill
-   - Word → `anthropics/docx` skill
-   - PPT → `anthropics/pptx` skill
+   - PDF → `pdf` skill（anthropics/skills 仓库）
+   - Word → `docx` skill
+   - PPT → `pptx` skill
    - Excel → Python `openpyxl` / `xlrd`
    - 图片 → 多模态识别（M3 原生支持）
 3. 执行处理
 4. 输出文件路径 + 简短说明
+
+> **注意**：opencode skill 命名规范 `[a-z0-9]+(-[a-z0-9]+)*`，**不带** `anthropics/` 前缀。
+> `permission.skill` 白名单用 `docx` `pdf` `pptx`（无前缀）。
 
 ## 输出格式
 

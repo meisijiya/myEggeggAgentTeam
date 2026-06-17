@@ -1,56 +1,68 @@
-// opencode.jsonc 模板 - 房间门团队专用（v4 / 老江湖定制版）
-// 参考设计文档：docs/superpowers/specs/2026-06-17-roomdoor-team-design.md §5.1
-// 主要改动 vs v3：
-//   1. 隐藏 build/plan（防女朋友误用默认 agent）
-//   2. tools.task: false（严格控制调度层级，只有 roomdoor 能委派）
-//   3. plugin: superpowers（自动装 30+ superpowers skill）
-//   4. 删 server / default_agent / fallback_model（简化配置）
-//   5. 全 M3（除 update 用 opencode/deepseek-v4-flash-free）
+// opencode.jsonc 模板 v5.2 - 房间门团队专用
+// 关键修订（vs v5.1）：
+//   1. permission 块从 opencode.json 移到 agent prompt frontmatter
+//      （与本机 onetwo/twoone/eggdog 模式一致；agent-specific config 优先于全局）
+//   2. opencode.json 简化：只留 default_agent / server / agent.{model,prompt,mode,tools}
+//   3. 移除所有 permission.* 字段
+//   4. 保留 $schema + default_agent + build/plan hidden
+//   5. A: 移除 plugin: superpowers（v5 决策）
+//
+// 参考设计文档：docs/superpowers/specs/2026-06-17-roomdoor-team-design.md
+// 单一事实源：L3 规则 → 参见 skills/dispatch-protocol/SKILL.md
+// agent 权限配置：每个 agent prompt 的 frontmatter permission 块
 
 {
   "$schema": "https://opencode.ai/config.json",
 
+  // 女朋友首次打开 UI 落到房间门（必须 primary agent；v5.2 roomdoor 改 mode: primary）
+  "default_agent": "roomdoor",
+
+  "server": {
+    "port": 4096,
+    "hostname": "0.0.0.0"
+  },
+
   "agent": {
     "build": { "hidden": true },
     "plan": { "hidden": true },
+
+    // ========== 房间门团队 6 Agent ==========
+    // 权限配置见各 agent prompt 的 frontmatter `permission` 块
+
     "roomdoor": {
       "model": "minimax-cn-coding-plan/MiniMax-M3",
-      "prompt": "{file:./agents/roomdoor.md}"
+      "prompt": "{file:./agents/roomdoor.md}",
+      "mode": "primary"  // v5.2: 显式 mode（frontmatter 也有，但 opencode.json 兜底）
     },
+
     "veteran": {
       "model": "minimax-cn-coding-plan/MiniMax-M3",
       "prompt": "{file:./agents/veteran.md}",
-      "tools": {
-        "task": false
-      }
+      "mode": "subagent"  // v5.2: 房间门 task(veteran) 调派；也可 @veteran 直接对话
     },
+
     "qiqi": {
       "model": "minimax-cn-coding-plan/MiniMax-M3",
       "prompt": "{file:./agents/qiqi.md}",
-      "tools": {
-        "task": false
-      }
+      "mode": "subagent"
     },
+
     "ccy": {
       "model": "minimax-cn-coding-plan/MiniMax-M3",
       "prompt": "{file:./agents/ccy.md}",
-      "tools": {
-        "task": false
-      }
+      "mode": "subagent"
     },
+
     "librarian": {
       "model": "minimax-cn-coding-plan/MiniMax-M3",
       "prompt": "{file:./agents/librarian.md}",
-      "tools": {
-        "task": false
-      }
+      "mode": "subagent"
     },
+
     "update": {
       "model": "opencode/deepseek-v4-flash-free",
       "prompt": "{file:./agents/update.md}",
-      "tools": {
-        "task": false
-      }
+      "mode": "subagent"
     }
   },
 
@@ -59,9 +71,17 @@
     "reserved": 50000,
     "preserve_recent_tokens": 50000,
     "tail_turns": 2
-  },
-
-  "plugin": [
-    "superpowers@git+https://github.com/obra/superpowers.git"
-  ]
+  }
 }
+
+// v5.2 架构说明：
+// - permission 块在 agent prompt frontmatter 配（与本机 onetwo 模式一致）
+// - opencode.json 只配 model / prompt / mode（**不**配 permission）
+// - 调度权限（task）：房间门 allow qiqi/ccy/librarian/update/veteran（5 个），其他 deny
+// - skill：全 allow（v5.2 决策：移除 superpowers plugin 后，10 个团队 skill 全开）
+// - bash：所有 agent 用统一黑名单（rm -rf /, sudo *, git push --force, npm publish, etc.）
+// - external_directory: ask（捕获 escape cwd 操作）
+// - L3 规则：单一事实源 = skills/dispatch-protocol/SKILL.md
+//
+// Fallback 模型策略：
+// 当前不配 fallback_model（M3 团队约定：主模型挂时由 opencode 自动降级或重试）

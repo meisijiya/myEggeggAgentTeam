@@ -1221,7 +1221,7 @@ git commit -m "docs: 云服务器部署文档（Cloudflare Tunnel + opencode web
 ## Task 13: Smoke Test（MVP 验收）
 
 **Files:**
-- Modify: `docs/audit/2026-06-17-smoke-test-result.md` (create)
+- Modify: `docs/audit/2026-06-17-smoke-test-result.md` (create)（v5.1 修订：audit 目录未创建，文件可放 `docs/superpowers/specs/` 或跳过此 task）
 
 - [ ] **Step 13.1: 执行 smoke test**
 
@@ -1263,8 +1263,10 @@ git commit -m "docs: 云服务器部署文档（Cloudflare Tunnel + opencode web
 - [ ] **Step 13.3: Commit**
 
 ```bash
-git add docs/audit/
-git commit -m "test: MVP smoke test"
+# v5.1 修订：audit 目录未创建（设计文档 §7.2 移除）
+# 改为可选提交——如果没有 smoke test 文件，commit 跳过 audit 目录
+git add docs/audit/ 2>/dev/null || true
+git commit -m "test: MVP smoke test" || echo "smoke test 文件未生成，跳过 commit"
 ```
 
 ---
