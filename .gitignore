@@ -1,0 +1,13 @@
+# 第三方 skill 安装日志
+install.log
+
+# 临时文件
+*.tmp
+*.bak
+
+# 用户记忆种子（不提交 - 含个人偏好）
+memory-seed/*.local.md
+
+# 系统文件
+.DS_Store
+Thumbs.db
