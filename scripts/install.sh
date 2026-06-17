@@ -86,14 +86,15 @@ echo "→ Step 6/7: 初始化 ~/.roomdoor-memory/"
 # v5.1 修订：原 `/usr/bin/opencode task(update, ...)` 不是合法 opencode CLI 命令
 # 改为独立的 shell 脚本（硬规则：软删除、容量检查、日志）
 # 智能合并/归档仍由房间门 @update 触发
+# v5.3.3 修订：用 ~/opt/ 代替 /opt/（不需要 sudo，普通用户权限即可）
 [ ! -f ~/.config/opencode/AGENTS.md ] && cp templates/AGENTS.md ~/.config/opencode/AGENTS.md
 mkdir -p ~/.roomdoor-memory/meta
-# 安装 memory-self-check.sh
-mkdir -p /opt/myEggeggAgentTeam/scripts
-cp scripts/memory-self-check.sh /opt/myEggeggAgentTeam/scripts/
-chmod +x /opt/myEggeggAgentTeam/scripts/memory-self-check.sh
-# 设置 cron
-(crontab -l 2>/dev/null; echo "0 4 * * * /opt/myEggeggAgentTeam/scripts/memory-self-check.sh >> ~/.roomdoor-memory/meta/cron.log 2>&1") | crontab -
+# 安装 memory-self-check.sh（用户家目录，避免 /opt/ 需 sudo）
+mkdir -p ~/opt/myEggeggAgentTeam/scripts
+cp scripts/memory-self-check.sh ~/opt/myEggeggAgentTeam/scripts/
+chmod +x ~/opt/myEggeggAgentTeam/scripts/memory-self-check.sh
+# 设置 cron（用 $HOME 拼绝对路径，避免用户家目录不在 /home/ubuntu）
+(crontab -l 2>/dev/null; echo "0 4 * * * $HOME/opt/myEggeggAgentTeam/scripts/memory-self-check.sh >> $HOME/.roomdoor-memory/meta/cron.log 2>&1") | crontab -
 
 echo "→ Step 7/7: AGENTS.md + 凌晨 4 点 cron"
 echo ""
