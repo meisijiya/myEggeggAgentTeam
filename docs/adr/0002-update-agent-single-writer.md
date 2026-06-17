@@ -7,7 +7,7 @@ date: 2026-06-17
 
 ## Context and Problem Statement
 
-房间门团队有多个 Agent（roomdoor, veteran, librarian, qiqi, ccy, update）需要读写记忆系统（`~/.roomdoor-memory/`）。如果允许多 Agent 直接写记忆，可能导致：1) 文件并发冲突（Markdown + grep 非事务性）；2) LLM 误判——不同 Agent 对同一记忆的不同理解；3) 记忆不可追溯。同时需要确保 `~/.config/opencode/`（opencode 的核心配置）不受团队 Agent 误写影响。
+房间门团队有多个 Agent（roomdoor, laoJiangHu, librarian, qiqi, ccy, update）需要读写记忆系统（`~/.roomdoor-memory/`）。如果允许多 Agent 直接写记忆，可能导致：1) 文件并发冲突（Markdown + grep 非事务性）；2) LLM 误判——不同 Agent 对同一记忆的不同理解；3) 记忆不可追溯。同时需要确保 `~/.config/opencode/`（opencode 的核心配置）不受团队 Agent 误写影响。
 
 ## Considered Options
 

@@ -1,8 +1,10 @@
-# 房间门 Agent 团队运维手册（v5.3.4）
+# 房间门 Agent 团队运维手册（v5.3.4-1）
 
 > 适用对象：运维人员 / 用户自己
-> 部署版本：v5.3.4（房间门 6-agent + 10 skill + 凌晨 4 点 cron）
+> 部署版本：v5.3.4-1（房间门 6-agent + 10 skill + 凌晨 4 点 cron + **配置硬编码**）
 > 服务地址：云服务器 `<CLOUD_SERVER_IP>:4096`
+>
+> **v5.3.4-1 关键改进**：所有配置（用户名/密码/端口/opencode 路径）**硬编码到 ops 脚本头部** + service 文件 ExecStart 用 `bash -c` **显式** export。**不**依赖 service 文件里的 `Environment=` 行（避免 systemd 解析问题）。
 
 ---
 
@@ -27,47 +29,46 @@
 
 ## 🚀 一键操作脚本
 
+**所有脚本配置（用户名/密码/端口）都硬编码在脚本头部**。改配置**只需**：
+1. 编辑 `scripts/ops-*.sh` 头部的 `USERNAME/PASSWORD/PORT`
+2. 编辑 `/etc/systemd/system/opencode-web.service` 里的 `OPENCODE_SERVER_USERNAME/PASSWORD`（service 文件用 `bash -c` 显式 export，不依赖 `Environment=`）
+3. `ops-restart.sh`
+
 ### 启动
 
 ```bash
 bash scripts/ops-start.sh
-# 等价于：
-sudo systemctl daemon-reload
-sudo systemctl enable --now opencode-web
 ```
 
 ### 停止
 
 ```bash
 bash scripts/ops-stop.sh
-# 等价于：
-sudo systemctl stop opencode-web
 ```
 
 ### 重启
 
 ```bash
 bash scripts/ops-restart.sh
-# 等价于：
-sudo systemctl restart opencode-web
 ```
 
 ### 查看状态
 
 ```bash
 bash scripts/ops-status.sh
-# 等价于：
-sudo systemctl status opencode-web --no-pager -l
 ```
 
 ### 查看实时日志
 
 ```bash
 bash scripts/ops-logs.sh
-# 等价于：
-sudo journalctl -u opencode-web -f
-# 或：
-tail -f /var/log/opencode-web.log
+```
+
+### 首次部署 / 修复 service 文件
+
+```bash
+bash scripts/ops-install.sh
+# 重写 service 文件（含硬编码配置）+ daemon-reload + start
 ```
 
 ---
@@ -390,3 +391,43 @@ rm -rf ~/.roomdoor-memory
 
 **版本**：v5.3.4（2026-06-17）
 **作者**：OneTwo（v5.3.4 部署）
+
+## 📂 workSpace 目录（v5.3.4-2 新增）
+
+opencode-web 服务在 `~/workSpace/` 目录运行，**所有 opencode 操作的文件**（上传/生成/项目）都集中在这里。
+
+### 目录结构
+
+```
+~/workSpace/                        (chmod 777)
+├── inbox/      (777)               # 入口：上传文件（发票照片、PDF 等）
+├── outbox/     (777)               # 出口：生成文件（PPT、Excel、Word）
+├── projects/   (777)               # 长期项目（财务报表、年度汇算等）
+└── start.sh    (777)               # 启动脚本（cd + export + exec opencode）
+```
+
+### 权限
+
+- **chmod 777**（任何用户可读/写/执行）—— 用户**明确**要求
+- 包括 `start.sh` 脚本（任何用户可改启动逻辑——**安全权衡**）
+- **未来**新建子目录**也**应 chmod 777：
+  ```bash
+  mkdir ~/workSpace/新目录
+  chmod 777 ~/workSpace/新目录
+  ```
+
+### 修改工作目录
+
+**不**推荐改 workSpace 路径（service 文件硬编码 `/home/ubuntu/workSpace`）。如要改：
+
+1. `bash ops-install.sh`（会重建 workSpace + 重写 service）
+2. 或手动：编辑 `/etc/systemd/system/opencode-web.service` 的 `WorkingDirectory=` 和 `ExecStart=`
+
+### 修改 start.sh
+
+```bash
+# 直接编辑（任何用户都能改，因 chmod 777）
+nano ~/workSpace/start.sh
+# 改完跑：
+bash ops-restart.sh
+```

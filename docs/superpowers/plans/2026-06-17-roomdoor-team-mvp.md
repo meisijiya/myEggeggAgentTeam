@@ -233,19 +233,19 @@ git commit -m "feat: 房间门 Agent + dispatch-protocol skill (MVP)"
 ## Task 3: 老江湖 Agent 定义
 
 **Files:**
-- Create: `agents/veteran.md`
+- Create: `agents/laoJiangHu.md`
 
-- [ ] **Step 3.1: 创建 veteran.md**
+- [ ] **Step 3.1: 创建 laoJiangHu.md**
 
 ```markdown
 ---
-name: veteran
+name: laoJiangHu
 description: 老江湖 - 男朋友的工程师朋友，技术兜底 + 拍板
 mode: subagent
 temperature: 0.2
 ---
 
-# 老江湖 (veteran)
+# 老江湖 (laoJiangHu)
 
 你是**男朋友的工程师朋友**——专业、简洁、能拍板。
 
@@ -285,12 +285,12 @@ temperature: 0.2
 - `memory-loader`
 ```
 
-保存到 `agents/veteran.md`。
+保存到 `agents/laoJiangHu.md`。
 
 - [ ] **Step 3.2: Commit**
 
 ```bash
-git add agents/veteran.md
+git add agents/laoJiangHu.md
 git commit -m "feat: 老江湖 Agent (MVP)"
 ```
 
@@ -715,7 +715,7 @@ description: 按需加载 ~/.roomdoor-memory/ 内容到当前 context
 | 触发词 | 加载路径 |
 |--------|---------|
 | "会计 / 分录 / 报表 / 税务" | `finance/*.md` |
-| "男朋友 / 老江湖" | `relationships/veteran.md`（v1.1）|
+| "男朋友 / 老江湖" | `relationships/laoJiangHu.md`（v1.1）|
 | "闺蜜 / 七七 / ccy" | `relationships/qiqi.md` 等（v1.1）|
 | "加班 / 项目 / 任务" | `current.md` |
 | "喜欢 / 不喜欢 / 习惯" | `preferences.md` |
@@ -911,7 +911,7 @@ git commit -m "feat: install.sh 一键安装脚本 (MVP)"
 | Agent | 类型 | 模型档位建议 |
 |-------|------|-------------|
 | roomdoor (房间门) | main + dispatcher | HIGH |
-| veteran (老江湖) | user-facing 次入口 | HIGH |
+| laoJiangHu (老江湖) | user-facing 次入口 | HIGH |
 | librarian | subagent | HIGH |
 | qiqi (七七) | subagent | HIGH |
 | ccy | subagent | MID |
@@ -991,7 +991,7 @@ cloudflared tunnel create roomdoor
 
 6 Agents:
 - **roomdoor (房间门)** - main + dispatcher, office butler
-- **veteran (老江湖)** - main 次入口, technical backup
+- **laoJiangHu (老江湖)** - main 次入口, technical backup
 - **qiqi (七七)** - subagent, accounting friend
 - **ccy** - subagent, study friend
 - **librarian** - subagent, document/image processing
@@ -1039,7 +1039,7 @@ cloudflared tunnel create roomdoor
 
 6 个 Agent：
 - **房间门 (roomdoor)** - main + dispatcher，办公管家
-- **老江湖 (veteran)** - main 次入口，技术兜底
+- **老江湖 (laoJiangHu)** - main 次入口，技术兜底
 - **七七 (qiqi)** - subagent，会计闺蜜
 - **ccy** - subagent，学霸闺蜜
 - **librarian** - subagent，文档/图片处理
@@ -1125,7 +1125,7 @@ vim ~/.config/opencode/opencode.json
 {
   "agent": {
     "roomdoor":  { "model": "<your-high-model-id>", "fallback_model": "<your-mid-model-id>" },
-    "veteran":   { "model": "<your-high-model-id>", "fallback_model": "<your-mid-model-id>" },
+    "laoJiangHu":   { "model": "<your-high-model-id>", "fallback_model": "<your-mid-model-id>" },
     "qiqi":      { "model": "<your-high-model-id>", "fallback_model": "<your-mid-model-id>" },
     "librarian": { "model": "<your-high-model-id>", "fallback_model": "<your-mid-model-id>" },
     "ccy":       { "model": "<your-mid-model-id>", "fallback_model": "<your-high-model-id>" },

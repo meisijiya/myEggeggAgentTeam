@@ -1,9 +1,15 @@
 #!/usr/bin/env bash
 # ops-status.sh - 查看 opencode-web 服务状态
 # 用途：运维人员快速诊断
-# 等价于：sudo systemctl status opencode-web --no-pager -l
+# v5.3.4-1: 配置硬编码到脚本（不依赖 service 文件 Environment=）
 
 set -euo pipefail
+
+# ===== 硬编码配置 =====
+USERNAME="<WEB_USERNAME>"
+PASSWORD="<WEB_PASSWORD>"
+PORT="4096"
+SERVICE_NAME="opencode-web.service"
 
 echo "=========================================="
 echo "  opencode-web 服务状态"
@@ -11,11 +17,11 @@ echo "=========================================="
 echo ""
 
 echo "▶ 1. systemd 状态："
-sudo systemctl status opencode-web --no-pager -l
+sudo systemctl status "$SERVICE_NAME" --no-pager -l
 echo ""
 
-echo "▶ 2. 端口 4096 监听："
-ss -tlnp 2>&1 | grep 4096 || netstat -tlnp 2>&1 | grep 4096 || echo "⚠️  4096 端口未监听"
+echo "▶ 2. 端口 $PORT 监听："
+ss -tlnp 2>&1 | grep "$PORT" || netstat -tlnp 2>&1 | grep "$PORT" || echo "⚠️  $PORT 端口未监听"
 echo ""
 
 echo "▶ 3. 进程："
@@ -23,7 +29,7 @@ ps aux | grep -E "opencode web" | grep -v grep || echo "⚠️  无 opencode 进
 echo ""
 
 echo "▶ 4. 本地访问测试："
-curl -sI -u <WEB_USERNAME>:<WEB_PASSWORD> http://localhost:4096/ 2>&1 | head -3 || echo "❌ 本地访问失败"
+curl -sI -u "${USERNAME}:${PASSWORD}" "http://localhost:${PORT}/" 2>&1 | head -3 || echo "❌ 本地访问失败"
 echo ""
 
 echo "▶ 5. 部署目录状态："
@@ -39,4 +45,4 @@ crontab -l 2>/dev/null | grep -i memory || echo "⚠️  无 memory cron"
 echo ""
 
 echo "▶ 7. 最近 5 行日志："
-sudo journalctl -u opencode-web --no-pager -n 5 2>&1 || tail -5 /var/log/opencode-web.log
+sudo journalctl -u "$SERVICE_NAME" --no-pager -n 5 2>&1 || tail -5 /var/log/opencode-web.log

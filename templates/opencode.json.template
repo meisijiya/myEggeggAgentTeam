@@ -35,10 +35,10 @@
       "mode": "primary"  // v5.2: 显式 mode（frontmatter 也有，但 opencode.json 兜底）
     },
 
-    "veteran": {
+    "laoJiangHu": {
       "model": "minimax-cn-coding-plan/MiniMax-M3",
-      "prompt": "{file:./agents/veteran.md}",
-      "mode": "subagent"  // v5.2: 房间门 task(veteran) 调派；也可 @veteran 直接对话
+      "prompt": "{file:./agents/laoJiangHu.md}",
+      "mode": "subagent"  // v5.2: 房间门 task(laoJiangHu) 调派；也可 @laoJiangHu 直接对话
     },
 
     "qiqi": {
@@ -77,7 +77,7 @@
 // v5.2 架构说明：
 // - permission 块在 agent prompt frontmatter 配（与本机 onetwo 模式一致）
 // - opencode.json 只配 model / prompt / mode（**不**配 permission）
-// - 调度权限（task）：房间门 allow qiqi/ccy/librarian/update/veteran（5 个），其他 deny
+// - 调度权限（task）：房间门 allow qiqi/ccy/librarian/update/laoJiangHu（5 个），其他 deny
 // - skill：全 allow（v5.2 决策：移除 superpowers plugin 后，10 个团队 skill 全开）
 // - bash：所有 agent 用统一黑名单（rm -rf /, sudo *, git push --force, npm publish, etc.）
 // - external_directory: ask（捕获 escape cwd 操作）

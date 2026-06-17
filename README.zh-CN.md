@@ -28,7 +28,7 @@ cloudflared tunnel create roomdoor
 
 6 个 Agent：
 - **房间门 (roomdoor)** - main + dispatcher，办公管家
-- **老江湖 (veteran)** - main 次入口，技术兜底
+- **老江湖 (laoJiangHu)** - main 次入口，技术兜底
 - **七七 (qiqi)** - subagent，会计闺蜜
 - **ccy** - subagent，学霸闺蜜
 - **librarian** - subagent，文档/图片处理

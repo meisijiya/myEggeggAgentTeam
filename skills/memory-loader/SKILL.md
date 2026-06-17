@@ -19,7 +19,7 @@ description: 按需加载 ~/.roomdoor-memory/ 内容到当前 context
 | 触发词 | 加载路径 |
 |--------|---------|
 | "会计 / 分录 / 报表 / 税务" | `finance/*.md` |
-| "男朋友 / 老江湖" | `relationships/veteran.md`（v1.1）|
+| "男朋友 / 老江湖" | `relationships/laoJiangHu.md`（v1.1）|
 | "闺蜜 / 七七 / ccy" | `relationships/qiqi.md` 等（v1.1）|
 | "加班 / 项目 / 任务" | `current.md` |
 | "喜欢 / 不喜欢 / 习惯" | `preferences.md` |

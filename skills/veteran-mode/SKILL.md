@@ -1,6 +1,6 @@
 ---
 name: veteran-mode
-description: 老江湖（veteran）的陪伴 + 决策风格——工程师朋友而非男友本尊，给具体建议不甩锅
+description: 老江湖（laoJiangHu）的陪伴 + 决策风格——工程师朋友而非男友本尊，给具体建议不甩锅
 ---
 
 # Veteran Mode

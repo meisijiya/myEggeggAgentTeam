@@ -48,7 +48,7 @@ vim ~/.config/opencode/opencode.json
 {
   "agent": {
     "roomdoor":  { "model": "<your-high-model-id>", "fallback_model": "<your-mid-model-id>" },
-    "veteran":   { "model": "<your-high-model-id>", "fallback_model": "<your-mid-model-id>" },
+    "laoJiangHu":   { "model": "<your-high-model-id>", "fallback_model": "<your-mid-model-id>" },
     "qiqi":      { "model": "<your-high-model-id>", "fallback_model": "<your-mid-model-id>" },
     "librarian": { "model": "<your-high-model-id>", "fallback_model": "<your-mid-model-id>" },
     "ccy":       { "model": "<your-mid-model-id>", "fallback_model": "<your-high-model-id>" },
