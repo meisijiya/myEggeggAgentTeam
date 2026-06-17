@@ -32,12 +32,21 @@ npx skills add anthropics/skills@<commit_hash> --skill docx pdf pptx 2>&1 | tee 
 echo "→ Step 4b/7: 安装会计财务 skill..."
 npx skills add <财务 skill repo>@<commit_hash> --skill tax-advisor expense-tracker 2>&1 | tee -a install.log || echo "⚠️  财务技能安装失败，跳过"
 
-# Step 5: 提示用户配置 opencode.json
-echo ""
-echo "⚠️  Step 5/7: 请手动配置 ~/.config/opencode/opencode.json："
-echo "    参考设计文档 §5.1，给 6 个 agent 分配 model + fallback_model"
-echo "    配置完成后，重启 opencode 让配置生效"
-echo ""
+# Step 5: 复制 opencode.json 模板（如果不存在）
+if [ ! -f ~/.config/opencode/opencode.json ] && [ ! -f ~/.config/opencode/opencode.jsonc ]; then
+    if [ -f templates/opencode.json.template ]; then
+        cp templates/opencode.json.template ~/.config/opencode/opencode.json
+        echo "→ Step 5/7: 复制 opencode.json 模板到 ~/.config/opencode/opencode.json"
+        echo ""
+        echo "⚠️  请编辑该文件，把 <HIGH 模型 ID> 和 <MID 模型 ID> 替换成实际模型 ID"
+        echo "    参考设计文档 §5.1 或 templates/opencode.json.template 注释"
+        echo ""
+    else
+        echo "⚠️  Step 5/7: templates/opencode.json.template 不存在，请手动创建 ~/.config/opencode/opencode.json"
+    fi
+else
+    echo "→ Step 5/7: ~/.config/opencode/opencode.json（或 .jsonc）已存在，跳过"
+fi
 
 # Step 6: 初始化 memory
 mkdir -p ~/.roomdoor-memory/{active,archive,_pending_delete,meta}

@@ -1,0 +1,67 @@
+// opencode.jsonc 模板 - 房间门团队专用（v4 / 老江湖定制版）
+// 参考设计文档：docs/superpowers/specs/2026-06-17-roomdoor-team-design.md §5.1
+// 主要改动 vs v3：
+//   1. 隐藏 build/plan（防女朋友误用默认 agent）
+//   2. tools.task: false（严格控制调度层级，只有 roomdoor 能委派）
+//   3. plugin: superpowers（自动装 30+ superpowers skill）
+//   4. 删 server / default_agent / fallback_model（简化配置）
+//   5. 全 M3（除 update 用 opencode/deepseek-v4-flash-free）
+
+{
+  "$schema": "https://opencode.ai/config.json",
+
+  "agent": {
+    "build": { "hidden": true },
+    "plan": { "hidden": true },
+    "roomdoor": {
+      "model": "minimax-cn-coding-plan/MiniMax-M3",
+      "prompt": "{file:./agents/roomdoor.md}"
+    },
+    "veteran": {
+      "model": "minimax-cn-coding-plan/MiniMax-M3",
+      "prompt": "{file:./agents/veteran.md}",
+      "tools": {
+        "task": false
+      }
+    },
+    "qiqi": {
+      "model": "minimax-cn-coding-plan/MiniMax-M3",
+      "prompt": "{file:./agents/qiqi.md}",
+      "tools": {
+        "task": false
+      }
+    },
+    "ccy": {
+      "model": "minimax-cn-coding-plan/MiniMax-M3",
+      "prompt": "{file:./agents/ccy.md}",
+      "tools": {
+        "task": false
+      }
+    },
+    "librarian": {
+      "model": "minimax-cn-coding-plan/MiniMax-M3",
+      "prompt": "{file:./agents/librarian.md}",
+      "tools": {
+        "task": false
+      }
+    },
+    "update": {
+      "model": "opencode/deepseek-v4-flash-free",
+      "prompt": "{file:./agents/update.md}",
+      "tools": {
+        "task": false
+      }
+    }
+  },
+
+  "compaction": {
+    "auto": true,
+    "reserved": 50000,
+    "preserve_recent_tokens": 50000,
+    "tail_turns": 2
+  },
+
+  "plugin": [
+    "superpowers@git+https://github.com/obra/superpowers.git"
+  ]
+}
